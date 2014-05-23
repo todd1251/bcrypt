@@ -8,16 +8,17 @@ int main(int argc, char *argv[])
 
     char salt[BCRYPT_HASHSIZE];
     char hash[BCRYPT_HASHSIZE];
+    int log_rounds = 12;
 
     if (argc != 2 && argc != 3)
     {
-        fprintf(stderr, "usage: %s <plaintext> [<salt>]\n", argv[0]);
+        fprintf(stderr, "usage: %s <plaintext> [<rounds>|<hash>]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    if (argc == 2) 
+    if (argc == 2 || sscanf(argv[2], "%d", &log_rounds) == 1)
     {
-        bcrypt_gensalt(12, salt);
+        bcrypt_gensalt(log_rounds, salt);
         bcrypt_hashpw(argv[1], salt, hash);
         printf("%s\n", hash);
     }
